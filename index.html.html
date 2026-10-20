@@ -11,130 +11,299 @@
   body { font-family: 'Noto Sans Thai', system-ui, -apple-system, 'Segoe UI', sans-serif; }
   @keyframes pop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
   .pop { animation: pop .25s ease-out; }
+  .hidden-view { display: none !important; }
 </style>
 </head>
 <body class="min-h-screen bg-stone-50 text-stone-800 antialiased">
   <main class="mx-auto max-w-xl px-5 py-12 sm:py-16">
 
-    <header class="mb-8">
-      <div class="flex items-center gap-2 text-sm font-medium text-emerald-600">
-        <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Quick Notes
-      </div>
-      <h1 class="mt-2 text-3xl font-semibold tracking-tight">จดอะไรดี วันนี้?</h1>
-      <p class="mt-1 text-stone-500">บันทึกข้อความสั้น ๆ ได้ทันที</p>
-    </header>
+    <!-- ================= AUTH VIEW ================= -->
+    <section id="authView" class="hidden-view">
+      <header class="mb-8">
+        <div class="flex items-center gap-2 text-sm font-medium text-emerald-600">
+          <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Quick Notes
+        </div>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight">ยินดีต้อนรับ</h1>
+        <p class="mt-1 text-stone-500">เข้าสู่ระบบเพื่อดูและจดโน้ตของคุณเอง</p>
+      </header>
 
-    <!-- Form -->
-    <div class="rounded-2xl border border-stone-200 bg-white p-2 shadow-sm focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-100 transition">
-      <div class="flex items-center gap-2">
-        <input id="noteInput" type="text" maxlength="280" autocomplete="off"
-          placeholder="พิมพ์ข้อความของคุณที่นี่..."
-          class="flex-1 bg-transparent px-3 py-2.5 text-base placeholder-stone-400 focus:outline-none">
-        <button id="saveBtn" type="button"
-          class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
-          บันทึก
-        </button>
-      </div>
-    </div>
-    <p id="status" class="mt-2 min-h-[1.25rem] px-1 text-sm text-stone-500"></p>
+      <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+        <div class="mb-5 flex rounded-xl bg-stone-100 p-1 text-sm font-medium">
+          <button id="tabLogin" type="button" class="flex-1 rounded-lg bg-white px-3 py-2 shadow-sm transition">เข้าสู่ระบบ</button>
+          <button id="tabSignup" type="button" class="flex-1 rounded-lg px-3 py-2 text-stone-500 transition">สมัครสมาชิก</button>
+        </div>
 
-    <!-- List -->
-    <section class="mt-8">
-      <div class="mb-3 flex items-center justify-between">
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-stone-400">รายการล่าสุด</h2>
-        <button id="refreshBtn" type="button" class="text-sm text-stone-400 transition hover:text-emerald-600">รีเฟรช</button>
+        <div class="space-y-3">
+          <input id="email" type="email" autocomplete="email" placeholder="อีเมล"
+            class="w-full rounded-xl border border-stone-200 px-4 py-2.5 placeholder-stone-400 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+          <input id="password" type="password" autocomplete="current-password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)"
+            class="w-full rounded-xl border border-stone-200 px-4 py-2.5 placeholder-stone-400 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+          <button id="authBtn" type="button"
+            class="w-full rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
+            เข้าสู่ระบบ
+          </button>
+        </div>
+        <p id="authStatus" class="mt-3 min-h-[1.25rem] text-sm text-stone-500"></p>
       </div>
-      <ul id="notesList" class="space-y-3"></ul>
+    </section>
+
+    <!-- ================= APP VIEW ================= -->
+    <section id="appView" class="hidden-view">
+      <header class="mb-8">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-sm font-medium text-emerald-600">
+            <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Quick Notes
+          </div>
+          <div class="flex items-center gap-3 text-sm">
+            <span id="userEmail" class="max-w-[10rem] truncate text-stone-400 sm:max-w-[16rem]"></span>
+            <button id="logoutBtn" type="button" class="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-stone-600 transition hover:border-rose-300 hover:text-rose-500">ออกจากระบบ</button>
+          </div>
+        </div>
+        <h1 class="mt-4 text-3xl font-semibold tracking-tight">จดอะไรดี วันนี้?</h1>
+        <p class="mt-1 text-stone-500">บันทึกข้อความสั้น ๆ ได้ทันที</p>
+      </header>
+
+      <div class="rounded-2xl border border-stone-200 bg-white p-2 shadow-sm transition focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-100">
+        <div class="flex items-center gap-2">
+          <input id="noteInput" type="text" maxlength="280" autocomplete="off"
+            placeholder="พิมพ์ข้อความของคุณที่นี่..."
+            class="flex-1 bg-transparent px-3 py-2.5 text-base placeholder-stone-400 focus:outline-none">
+          <button id="saveBtn" type="button"
+            class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
+            บันทึก
+          </button>
+        </div>
+      </div>
+      <p id="status" class="mt-2 min-h-[1.25rem] px-1 text-sm text-stone-500"></p>
+
+      <section class="mt-8">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-stone-400">รายการล่าสุด</h2>
+          <button id="refreshBtn" type="button" class="text-sm text-stone-400 transition hover:text-emerald-600">รีเฟรช</button>
+        </div>
+        <ul id="notesList" class="space-y-3"></ul>
+      </section>
     </section>
 
     <footer class="mt-12 text-center text-xs text-stone-400">Powered by Supabase</footer>
   </main>
 
 <script>
-  // ---- Supabase config ----
+  // ---------- Supabase config ----------
   const SUPABASE_URL = 'https://igdnsndyvhmyypmllfnp.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZG5zbmR5dmhteXlwbWxsZm5wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0NDc4MDcsImV4cCI6MjEwODAyMzgwN30.2dKMH7EHiYpWFy0bkqkGOGUp9Gm6IKachGMFf7q3k8I';
-  // Custom fetch: แปลง Headers object เป็น plain object
-  // (แก้ DataCloneError เมื่อรันในสภาพแวดล้อมที่ proxy fetch ผ่าน postMessage เช่น artifact preview)
+
+  // แปลง Headers เป็น plain object (กัน DataCloneError ในสภาพแวดล้อม sandbox)
   const safeFetch = (url, options = {}) => {
     const opts = { ...options };
-    if (opts.headers instanceof Headers) {
-      opts.headers = Object.fromEntries(opts.headers.entries());
-    }
+    if (opts.headers instanceof Headers) opts.headers = Object.fromEntries(opts.headers.entries());
     return fetch(typeof url === 'string' ? url : String(url), opts);
   };
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { fetch: safeFetch } });
 
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { fetch: safeFetch }
-  });
+  // ---------- Elements ----------
+  const $ = id => document.getElementById(id);
+  const authView = $('authView'), appView = $('appView');
+  const emailEl = $('email'), passEl = $('password'), authBtn = $('authBtn'), authStatus = $('authStatus');
+  const tabLogin = $('tabLogin'), tabSignup = $('tabSignup');
+  const input = $('noteInput'), saveBtn = $('saveBtn'), statusEl = $('status');
+  const listEl = $('notesList');
 
-  const input = document.getElementById('noteInput');
-  const saveBtn = document.getElementById('saveBtn');
-  const statusEl = document.getElementById('status');
-  const listEl = document.getElementById('notesList');
-  const refreshBtn = document.getElementById('refreshBtn');
+  let mode = 'login';       // 'login' | 'signup'
+  let currentUser = null;
+  let editingId = null;
+  let notes = [];
 
-  function setStatus(msg, type) {
-    statusEl.textContent = msg || '';
-    statusEl.className = 'mt-2 min-h-[1.25rem] px-1 text-sm ' +
-      (type === 'error' ? 'text-rose-500' : type === 'ok' ? 'text-emerald-600' : 'text-stone-500');
-  }
-
+  // ---------- Helpers ----------
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
-
   function formatDate(iso) {
     if (!iso) return '';
     return new Date(iso).toLocaleString('th-TH', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
+  function setStatus(el, msg, type) {
+    el.textContent = msg || '';
+    const base = el === statusEl ? 'mt-2 min-h-[1.25rem] px-1 text-sm ' : 'mt-3 min-h-[1.25rem] text-sm ';
+    el.className = base + (type === 'error' ? 'text-rose-500' : type === 'ok' ? 'text-emerald-600' : 'text-stone-500');
+  }
+  function thaiError(msg) {
+    const m = (msg || '').toLowerCase();
+    if (m.includes('invalid login')) return 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+    if (m.includes('already registered')) return 'อีเมลนี้สมัครไว้แล้ว ลองเข้าสู่ระบบแทน';
+    if (m.includes('email not confirmed')) return 'ยังไม่ได้ยืนยันอีเมล กรุณาตรวจสอบกล่องจดหมาย';
+    if (m.includes('at least 6')) return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+    if (m.includes('rate limit')) return 'ลองบ่อยเกินไป กรุณารอสักครู่';
+    return msg;
+  }
 
-  function renderEmpty(text) {
-    listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">' + text + '</li>';
+  // ---------- Views ----------
+  function showView(loggedIn) {
+    authView.classList.toggle('hidden-view', loggedIn);
+    appView.classList.toggle('hidden-view', !loggedIn);
+  }
+
+  // ---------- Auth ----------
+  function setMode(m) {
+    mode = m;
+    const on = 'flex-1 rounded-lg bg-white px-3 py-2 shadow-sm transition';
+    const off = 'flex-1 rounded-lg px-3 py-2 text-stone-500 transition';
+    tabLogin.className = m === 'login' ? on : off;
+    tabSignup.className = m === 'signup' ? on : off;
+    authBtn.textContent = m === 'login' ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก';
+    passEl.autocomplete = m === 'login' ? 'current-password' : 'new-password';
+    setStatus(authStatus, '');
+  }
+
+  async function submitAuth() {
+    const email = emailEl.value.trim();
+    const password = passEl.value;
+    if (!email || !password) { setStatus(authStatus, 'กรุณากรอกอีเมลและรหัสผ่าน', 'error'); return; }
+
+    authBtn.disabled = true;
+    setStatus(authStatus, 'กำลังดำเนินการ...');
+
+    if (mode === 'login') {
+      const { error } = await db.auth.signInWithPassword({ email, password });
+      if (error) setStatus(authStatus, thaiError(error.message), 'error');
+    } else {
+      const { data, error } = await db.auth.signUp({ email, password });
+      if (error) setStatus(authStatus, thaiError(error.message), 'error');
+      else if (!data.session) setStatus(authStatus, 'สมัครสำเร็จ! กรุณาตรวจสอบอีเมลเพื่อยืนยันก่อนเข้าสู่ระบบ', 'ok');
+    }
+    authBtn.disabled = false;
+  }
+
+  async function logout() {
+    await db.auth.signOut();
+  }
+
+  // ---------- Notes ----------
+  function renderNotes() {
+    if (!notes.length) {
+      listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">ยังไม่มีโน้ต เริ่มจดอันแรกได้เลย</li>';
+      return;
+    }
+    listEl.innerHTML = notes.map(n => {
+      if (n.id === editingId) {
+        return `
+        <li class="pop rounded-2xl border border-emerald-300 bg-white px-5 py-4 shadow-sm ring-4 ring-emerald-50">
+          <textarea id="editArea" rows="3" maxlength="280"
+            class="w-full resize-none rounded-xl border border-stone-200 px-3 py-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">${escapeHtml(n.content)}</textarea>
+          <div class="mt-3 flex justify-end gap-2 text-sm">
+            <button data-act="cancel" class="rounded-lg px-3 py-1.5 text-stone-500 transition hover:bg-stone-100">ยกเลิก</button>
+            <button data-act="update" data-id="${n.id}" class="rounded-lg bg-emerald-600 px-4 py-1.5 font-medium text-white transition hover:bg-emerald-700">บันทึก</button>
+          </div>
+        </li>`;
+      }
+      return `
+      <li class="pop rounded-2xl border border-stone-200 bg-white px-5 py-4 shadow-sm">
+        <p class="whitespace-pre-wrap break-words text-stone-800">${escapeHtml(n.content)}</p>
+        <div class="mt-2 flex items-center justify-between">
+          <span class="text-xs text-stone-400">${formatDate(n.created_at)}</span>
+          <div class="flex gap-1 text-xs">
+            <button data-act="edit" data-id="${n.id}" class="rounded-lg px-2.5 py-1 text-stone-400 transition hover:bg-emerald-50 hover:text-emerald-600">แก้ไข</button>
+            <button data-act="delete" data-id="${n.id}" class="rounded-lg px-2.5 py-1 text-stone-400 transition hover:bg-rose-50 hover:text-rose-500">ลบ</button>
+          </div>
+        </div>
+      </li>`;
+    }).join('');
+
+    if (editingId) { const ta = $('editArea'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }
   }
 
   async function loadNotes() {
+    if (!currentUser) return;
     listEl.innerHTML = '<li class="py-8 text-center text-stone-400">กำลังโหลด...</li>';
     const { data, error } = await db
       .from('quick_notes')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(50);
-
     if (error) {
-      renderEmpty('โหลดข้อมูลไม่สำเร็จ');
-      setStatus('โหลดไม่สำเร็จ: ' + error.message, 'error');
+      listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">โหลดข้อมูลไม่สำเร็จ</li>';
+      setStatus(statusEl, 'โหลดไม่สำเร็จ: ' + error.message, 'error');
       return;
     }
-    if (!data.length) { renderEmpty('ยังไม่มีโน้ต เริ่มจดอันแรกได้เลย'); return; }
-
-    listEl.innerHTML = data.map(n => `
-      <li class="pop rounded-2xl border border-stone-200 bg-white px-5 py-4 shadow-sm">
-        <p class="whitespace-pre-wrap break-words text-stone-800">${escapeHtml(n.content)}</p>
-        <p class="mt-2 text-xs text-stone-400">${formatDate(n.created_at)}</p>
-      </li>`).join('');
+    notes = data;
+    editingId = null;
+    renderNotes();
   }
 
   async function saveNote() {
     const content = input.value.trim();
-    if (!content) { setStatus('กรุณาพิมพ์ข้อความก่อนบันทึก', 'error'); input.focus(); return; }
-
+    if (!content) { setStatus(statusEl, 'กรุณาพิมพ์ข้อความก่อนบันทึก', 'error'); input.focus(); return; }
     saveBtn.disabled = true;
-    setStatus('กำลังบันทึก...');
-    const { error } = await db.from('quick_notes').insert({ content });
+    setStatus(statusEl, 'กำลังบันทึก...');
+    const { error } = await db.from('quick_notes').insert({ content, user_id: currentUser.id });
     saveBtn.disabled = false;
-
-    if (error) { setStatus('บันทึกไม่สำเร็จ: ' + error.message, 'error'); return; }
+    if (error) { setStatus(statusEl, 'บันทึกไม่สำเร็จ: ' + error.message, 'error'); return; }
     input.value = '';
-    setStatus('บันทึกแล้ว ✓', 'ok');
-    setTimeout(() => setStatus(''), 2000);
+    setStatus(statusEl, 'บันทึกแล้ว ✓', 'ok');
+    setTimeout(() => setStatus(statusEl, ''), 2000);
     loadNotes();
   }
 
+  async function updateNote(id) {
+    const content = $('editArea').value.trim();
+    if (!content) { setStatus(statusEl, 'ข้อความต้องไม่ว่าง', 'error'); return; }
+    const { error } = await db.from('quick_notes').update({ content }).eq('id', id);
+    if (error) { setStatus(statusEl, 'แก้ไขไม่สำเร็จ: ' + error.message, 'error'); return; }
+    setStatus(statusEl, 'แก้ไขแล้ว ✓', 'ok');
+    setTimeout(() => setStatus(statusEl, ''), 2000);
+    loadNotes();
+  }
+
+  async function deleteNote(id) {
+    if (!confirm('ต้องการลบโน้ตนี้ใช่หรือไม่?')) return;
+    const { error } = await db.from('quick_notes').delete().eq('id', id);
+    if (error) { setStatus(statusEl, 'ลบไม่สำเร็จ: ' + error.message, 'error'); return; }
+    setStatus(statusEl, 'ลบแล้ว', 'ok');
+    setTimeout(() => setStatus(statusEl, ''), 2000);
+    loadNotes();
+  }
+
+  // ---------- Events ----------
+  tabLogin.addEventListener('click', () => setMode('login'));
+  tabSignup.addEventListener('click', () => setMode('signup'));
+  authBtn.addEventListener('click', submitAuth);
+  passEl.addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(); });
+  $('logoutBtn').addEventListener('click', logout);
+  $('refreshBtn').addEventListener('click', loadNotes);
   saveBtn.addEventListener('click', saveNote);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') saveNote(); });
-  refreshBtn.addEventListener('click', loadNotes);
-  loadNotes();
+
+  listEl.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    const id = Number(btn.dataset.id);
+    switch (btn.dataset.act) {
+      case 'edit':   editingId = id; renderNotes(); break;
+      case 'cancel': editingId = null; renderNotes(); break;
+      case 'update': updateNote(id); break;
+      case 'delete': deleteNote(id); break;
+    }
+  });
+
+  // ---------- Session handling ----------
+  function applySession(session) {
+    currentUser = session ? session.user : null;
+    showView(!!currentUser);
+    if (currentUser) {
+      $('userEmail').textContent = currentUser.email;
+      loadNotes();
+    } else {
+      notes = []; editingId = null; listEl.innerHTML = '';
+      passEl.value = '';
+    }
+  }
+
+  db.auth.onAuthStateChange((event, session) => {
+    // เลื่อนออกไปนอก callback เพื่อเลี่ยง deadlock ของ supabase-js
+    setTimeout(() => applySession(session), 0);
+  });
+  db.auth.getSession().then(({ data }) => applySession(data.session));
+  setMode('login');
 </script>
 </body>
 </html>
