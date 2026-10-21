@@ -42,8 +42,38 @@
             class="w-full rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
             เข้าสู่ระบบ
           </button>
+          <div class="text-center">
+            <button id="forgotBtn" type="button" class="text-sm text-stone-400 transition hover:text-emerald-600">ลืมรหัสผ่าน?</button>
+          </div>
         </div>
         <p id="authStatus" class="mt-3 min-h-[1.25rem] text-sm text-stone-500"></p>
+      </div>
+    </section>
+
+    <!-- ================= RECOVERY VIEW (ตั้งรหัสผ่านใหม่) ================= -->
+    <section id="recoveryView" class="hidden-view">
+      <header class="mb-8">
+        <div class="flex items-center gap-2 text-sm font-medium text-emerald-600">
+          <span class="inline-block h-2 w-2 rounded-full bg-emerald-500"></span> Quick Task Notes
+        </div>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight">ตั้งรหัสผ่านใหม่</h1>
+        <p class="mt-1 text-stone-500">กรอกรหัสผ่านใหม่ที่ต้องการใช้</p>
+      </header>
+      <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
+        <div class="space-y-3">
+          <input id="newPass" type="password" autocomplete="new-password" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)"
+            class="w-full rounded-xl border border-stone-200 px-4 py-2.5 placeholder-stone-400 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+          <input id="newPass2" type="password" autocomplete="new-password" placeholder="ยืนยันรหัสผ่านใหม่"
+            class="w-full rounded-xl border border-stone-200 px-4 py-2.5 placeholder-stone-400 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+          <button id="recoveryBtn" type="button"
+            class="w-full rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
+            บันทึกรหัสผ่านใหม่
+          </button>
+          <div class="text-center">
+            <button id="recoveryCancel" type="button" class="text-sm text-stone-400 transition hover:text-rose-500">ยกเลิก</button>
+          </div>
+        </div>
+        <p id="recoveryStatus" class="mt-3 min-h-[1.25rem] text-sm text-stone-500"></p>
       </div>
     </section>
 
@@ -74,15 +104,59 @@
             บันทึก
           </button>
         </div>
-        <div class="mt-1 flex items-center gap-2 border-t border-stone-100 px-3 pt-2 pb-1 text-sm text-stone-500">
-          <label for="deadlineInput" class="shrink-0">กำหนดส่ง</label>
-          <input id="deadlineInput" type="date"
-            class="rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
-          <button id="clearDeadline" type="button" class="text-xs text-stone-400 transition hover:text-rose-500">ล้าง</button>
-          <span class="ml-auto hidden text-xs text-stone-400 sm:inline">ไม่ใส่ก็ได้</span>
+
+        <div class="mt-1 space-y-2 border-t border-stone-100 px-3 pt-2 pb-1 text-sm text-stone-500">
+          <!-- deadline -->
+          <div class="flex items-center gap-2">
+            <label for="deadlineInput" class="w-20 shrink-0">กำหนดส่ง</label>
+            <input id="deadlineInput" type="date"
+              class="rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
+            <button id="clearDeadline" type="button" class="text-xs text-stone-400 transition hover:text-rose-500">ล้าง</button>
+            <span class="ml-auto hidden text-xs text-stone-400 sm:inline">ไม่ใส่ก็ได้</span>
+          </div>
+          <!-- priority -->
+          <div class="flex items-center gap-2">
+            <span class="w-20 shrink-0">ความสำคัญ</span>
+            <div class="flex gap-1.5" id="prioPills">
+              <button type="button" data-prio-new="urgent" class="rounded-full px-3 py-1 text-xs font-medium transition">เร่งด่วน</button>
+              <button type="button" data-prio-new="normal" class="rounded-full px-3 py-1 text-xs font-medium transition">ปกติ</button>
+              <button type="button" data-prio-new="low" class="rounded-full px-3 py-1 text-xs font-medium transition">ไว้ก่อน</button>
+            </div>
+          </div>
+          <!-- category -->
+          <div class="flex items-center gap-2">
+            <label for="categoryInput" class="w-20 shrink-0">หมวดหมู่</label>
+            <input id="categoryInput" type="text" maxlength="40" list="categoryList" autocomplete="off"
+              placeholder="พิมพ์ชื่อหมวดหมู่เอง เช่น ลูกค้า, ประชุม"
+              class="min-w-0 flex-1 rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 placeholder-stone-300 focus:border-emerald-400 focus:outline-none">
+          </div>
         </div>
+        <datalist id="categoryList"></datalist>
       </div>
       <p id="status" class="mt-2 min-h-[1.25rem] px-1 text-sm text-stone-500"></p>
+
+      <!-- Search / filter -->
+      <div class="mt-4 rounded-2xl border border-stone-200 bg-white p-3 shadow-sm">
+        <input id="searchInput" type="search" placeholder="ค้นหางานหรือหมวดหมู่..." autocomplete="off"
+          class="w-full rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm placeholder-stone-400 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">
+        <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <select id="filterCategory" class="rounded-xl border border-stone-200 bg-white px-2 py-1.5 text-sm text-stone-600 focus:border-emerald-400 focus:outline-none"></select>
+          <select id="filterPriority" class="rounded-xl border border-stone-200 bg-white px-2 py-1.5 text-sm text-stone-600 focus:border-emerald-400 focus:outline-none">
+            <option value="">ทุกระดับความสำคัญ</option>
+            <option value="urgent">เร่งด่วน</option>
+            <option value="normal">ปกติ</option>
+            <option value="low">ไว้ก่อน</option>
+          </select>
+          <select id="sortBy" class="rounded-xl border border-stone-200 bg-white px-2 py-1.5 text-sm text-stone-600 focus:border-emerald-400 focus:outline-none">
+            <option value="priority">เรียง: ความสำคัญ</option>
+            <option value="deadline">เรียง: กำหนดส่ง</option>
+            <option value="newest">เรียง: ใหม่สุด</option>
+          </select>
+        </div>
+        <div class="mt-2 flex justify-end">
+          <button id="clearFilters" type="button" class="hidden-view text-xs text-stone-400 transition hover:text-rose-500">ล้างตัวกรอง</button>
+        </div>
+      </div>
 
       <!-- Pending -->
       <section class="mt-8">
@@ -121,17 +195,24 @@
 
   // ---------- Elements ----------
   const $ = id => document.getElementById(id);
-  const authView = $('authView'), appView = $('appView');
+  const authView = $('authView'), appView = $('appView'), recoveryView = $('recoveryView');
   const emailEl = $('email'), passEl = $('password'), authBtn = $('authBtn'), authStatus = $('authStatus');
-  const tabLogin = $('tabLogin'), tabSignup = $('tabSignup');
-  const input = $('noteInput'), deadlineInput = $('deadlineInput'), saveBtn = $('saveBtn'), statusEl = $('status');
+  const tabLogin = $('tabLogin'), tabSignup = $('tabSignup'), forgotBtn = $('forgotBtn');
+  const input = $('noteInput'), deadlineInput = $('deadlineInput'), categoryInput = $('categoryInput');
+  const saveBtn = $('saveBtn'), statusEl = $('status');
   const listEl = $('notesList'), doneListEl = $('doneList');
+
+  const PRIO = { urgent: { label: 'เร่งด่วน', rank: 0 }, normal: { label: 'ปกติ', rank: 1 }, low: { label: 'ไว้ก่อน', rank: 2 } };
 
   let mode = 'login';       // 'login' | 'signup'
   let currentUser = null;
   let editingId = null;
   let showDone = true;
   let notes = [];
+  let newPriority = 'normal';
+  let filters = { q: '', cat: '', prio: '', sort: 'priority' };
+  // เข้ามาจากลิงก์รีเซ็ตรหัสผ่านในอีเมลหรือไม่
+  let recoveryMode = /type=recovery/.test(location.hash);
 
   // ---------- Helpers ----------
   function escapeHtml(s) {
@@ -159,6 +240,15 @@
     if (n.deadline === today) return `<span class="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-600">วันนี้ · ${label}</span>`;
     return `<span class="rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700">${label}</span>`;
   }
+  function prioBadge(n) {
+    if (n.priority === 'urgent') return `<span class="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">${n.is_done ? '' : '● '}เร่งด่วน</span>`;
+    if (n.priority === 'low')    return `<span class="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500">ไว้ก่อน</span>`;
+    return '';
+  }
+  function categoryBadge(n) {
+    if (!n.category) return '';
+    return `<span class="rounded-full bg-sky-50 px-2 py-0.5 text-xs text-sky-700"># ${escapeHtml(n.category)}</span>`;
+  }
   function setStatus(el, msg, type) {
     el.textContent = msg || '';
     const base = el === statusEl ? 'mt-2 min-h-[1.25rem] px-1 text-sm ' : 'mt-3 min-h-[1.25rem] text-sm ';
@@ -174,14 +264,16 @@
     if (m.includes('already registered')) return 'อีเมลนี้สมัครไว้แล้ว ลองเข้าสู่ระบบแทน';
     if (m.includes('email not confirmed')) return 'ยังไม่ได้ยืนยันอีเมล กรุณาตรวจสอบกล่องจดหมาย';
     if (m.includes('at least 6')) return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
-    if (m.includes('rate limit')) return 'ลองบ่อยเกินไป กรุณารอสักครู่';
+    if (m.includes('different from the old')) return 'รหัสผ่านใหม่ต้องไม่ซ้ำกับรหัสผ่านเดิม';
+    if (m.includes('rate limit') || m.includes('security purposes')) return 'ลองบ่อยเกินไป กรุณารอสักครู่';
     return msg;
   }
 
   // ---------- Views ----------
-  function showView(loggedIn) {
-    authView.classList.toggle('hidden-view', loggedIn);
-    appView.classList.toggle('hidden-view', !loggedIn);
+  function showView(name) {
+    authView.classList.toggle('hidden-view', name !== 'auth');
+    appView.classList.toggle('hidden-view', name !== 'app');
+    recoveryView.classList.toggle('hidden-view', name !== 'recovery');
   }
 
   // ---------- Auth ----------
@@ -193,6 +285,7 @@
     tabSignup.className = m === 'signup' ? on : off;
     authBtn.textContent = m === 'login' ? 'เข้าสู่ระบบ' : 'สมัครสมาชิก';
     passEl.autocomplete = m === 'login' ? 'current-password' : 'new-password';
+    forgotBtn.parentElement.classList.toggle('hidden-view', m !== 'login');
     setStatus(authStatus, '');
   }
 
@@ -215,22 +308,120 @@
     authBtn.disabled = false;
   }
 
-  async function logout() {
+  async function forgotPassword() {
+    const email = emailEl.value.trim();
+    if (!email) { setStatus(authStatus, 'กรอกอีเมลในช่องด้านบนก่อน แล้วกด "ลืมรหัสผ่าน?" อีกครั้ง', 'error'); emailEl.focus(); return; }
+    forgotBtn.disabled = true;
+    setStatus(authStatus, 'กำลังส่งลิงก์...');
+    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+    forgotBtn.disabled = false;
+    if (error) setStatus(authStatus, thaiError(error.message), 'error');
+    else setStatus(authStatus, 'ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่อีเมลแล้ว (ถ้าอีเมลนี้มีบัญชีอยู่) กรุณาตรวจสอบกล่องจดหมาย', 'ok');
+  }
+
+  async function submitRecovery() {
+    const p1 = $('newPass').value, p2 = $('newPass2').value;
+    const st = $('recoveryStatus');
+    if (p1.length < 6) { setStatus(st, 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', 'error'); return; }
+    if (p1 !== p2) { setStatus(st, 'รหัสผ่านทั้งสองช่องไม่ตรงกัน', 'error'); return; }
+    $('recoveryBtn').disabled = true;
+    setStatus(st, 'กำลังบันทึก...');
+    const { error } = await db.auth.updateUser({ password: p1 });
+    $('recoveryBtn').disabled = false;
+    if (error) { setStatus(st, thaiError(error.message), 'error'); return; }
+    recoveryMode = false;
+    $('newPass').value = ''; $('newPass2').value = '';
+    history.replaceState(null, '', location.pathname);
+    const { data } = await db.auth.getSession();
+    applySession(data.session);
+    flash('เปลี่ยนรหัสผ่านเรียบร้อยแล้ว ✓', 'ok');
+  }
+
+  async function cancelRecovery() {
+    recoveryMode = false;
+    history.replaceState(null, '', location.pathname);
     await db.auth.signOut();
+  }
+
+  async function logout() { await db.auth.signOut(); }
+
+  // ---------- Filtering / sorting ----------
+  function allCategories() {
+    return [...new Set(notes.map(n => n.category).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'th'));
+  }
+  function applyFilters(list) {
+    const q = filters.q.trim().toLowerCase();
+    return list.filter(n => {
+      if (q && !((n.content || '').toLowerCase().includes(q) || (n.category || '').toLowerCase().includes(q))) return false;
+      if (filters.cat === '__none__' && n.category) return false;
+      if (filters.cat && filters.cat !== '__none__' && n.category !== filters.cat) return false;
+      if (filters.prio && n.priority !== filters.prio) return false;
+      return true;
+    });
+  }
+  const byDeadline = (a, b) => {
+    if (a.deadline && b.deadline && a.deadline !== b.deadline) return a.deadline < b.deadline ? -1 : 1;
+    if (a.deadline && !b.deadline) return -1;
+    if (!a.deadline && b.deadline) return 1;
+    return 0;
+  };
+  const byNewest = (a, b) => new Date(b.created_at) - new Date(a.created_at);
+  const byPrio = (a, b) => (PRIO[a.priority]?.rank ?? 1) - (PRIO[b.priority]?.rank ?? 1);
+
+  function sortPending(list) {
+    const cmp = filters.sort === 'newest'
+      ? byNewest
+      : filters.sort === 'deadline'
+        ? (a, b) => byDeadline(a, b) || byNewest(a, b)
+        : (a, b) => byPrio(a, b) || byDeadline(a, b) || byNewest(a, b);
+    return list.sort(cmp);
+  }
+
+  function refreshCategoryControls() {
+    const cats = allCategories();
+    if (filters.cat && filters.cat !== '__none__' && !cats.includes(filters.cat)) filters.cat = '';
+    const sel = $('filterCategory');
+    sel.innerHTML = '<option value="">ทุกหมวดหมู่</option><option value="__none__">ไม่มีหมวดหมู่</option>' +
+      cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    sel.value = filters.cat;
+    $('categoryList').innerHTML = cats.map(c => `<option value="${escapeHtml(c)}"></option>`).join('');
+  }
+
+  function renderPrioPills() {
+    const active = { urgent: 'bg-rose-500 text-white', normal: 'bg-emerald-600 text-white', low: 'bg-stone-500 text-white' };
+    document.querySelectorAll('[data-prio-new]').forEach(b => {
+      const p = b.dataset.prioNew;
+      b.className = 'rounded-full px-3 py-1 text-xs font-medium transition ' +
+        (p === newPriority ? active[p] : 'bg-stone-100 text-stone-500 hover:bg-stone-200');
+    });
   }
 
   // ---------- Render ----------
   function renderPendingItem(n) {
     if (n.id === editingId) {
+      const opt = (v, t) => `<option value="${v}" ${n.priority === v ? 'selected' : ''}>${t}</option>`;
       return `
       <li class="pop rounded-2xl border border-emerald-300 bg-white px-5 py-4 shadow-sm ring-4 ring-emerald-50">
         <textarea id="editArea" rows="3" maxlength="280"
           class="w-full resize-none rounded-xl border border-stone-200 px-3 py-2 focus:border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-100">${escapeHtml(n.content)}</textarea>
-        <div class="mt-3 flex items-center gap-2 text-sm text-stone-500">
-          <label for="editDeadline" class="shrink-0">กำหนดส่ง</label>
-          <input id="editDeadline" type="date" value="${n.deadline || ''}"
-            class="rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
-          <button data-act="clear-edit-deadline" class="text-xs text-stone-400 transition hover:text-rose-500">ล้าง</button>
+        <div class="mt-3 space-y-2 text-sm text-stone-500">
+          <div class="flex items-center gap-2">
+            <label for="editDeadline" class="w-20 shrink-0">กำหนดส่ง</label>
+            <input id="editDeadline" type="date" value="${n.deadline || ''}"
+              class="rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
+            <button data-act="clear-edit-deadline" class="text-xs text-stone-400 transition hover:text-rose-500">ล้าง</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="editPriority" class="w-20 shrink-0">ความสำคัญ</label>
+            <select id="editPriority" class="rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
+              ${opt('urgent', 'เร่งด่วน')}${opt('normal', 'ปกติ')}${opt('low', 'ไว้ก่อน')}
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="editCategory" class="w-20 shrink-0">หมวดหมู่</label>
+            <input id="editCategory" type="text" maxlength="40" list="categoryList" value="${escapeHtml(n.category || '')}" autocomplete="off"
+              class="min-w-0 flex-1 rounded-lg border border-stone-200 bg-stone-50 px-2 py-1 text-stone-700 focus:border-emerald-400 focus:outline-none">
+          </div>
         </div>
         <div class="mt-3 flex justify-end gap-2 text-sm">
           <button data-act="cancel" class="rounded-lg px-3 py-1.5 text-stone-500 transition hover:bg-stone-100">ยกเลิก</button>
@@ -238,15 +429,16 @@
         </div>
       </li>`;
     }
+    const accent = n.priority === 'urgent' ? 'border-l-4 border-l-rose-400' : n.priority === 'low' ? 'border-l-4 border-l-stone-300' : '';
     return `
-    <li class="pop rounded-2xl border border-stone-200 bg-white px-4 py-4 shadow-sm">
+    <li class="pop rounded-2xl border border-stone-200 ${accent} bg-white px-4 py-4 shadow-sm">
       <div class="flex items-start gap-3">
         <button data-act="toggle" data-id="${n.id}" title="ทำเสร็จแล้ว"
           class="mt-0.5 h-5 w-5 shrink-0 rounded-full border-2 border-stone-300 transition hover:border-emerald-500 hover:bg-emerald-50"></button>
         <div class="min-w-0 flex-1">
           <p class="whitespace-pre-wrap break-words text-stone-800">${escapeHtml(n.content)}</p>
           <div class="mt-2 flex flex-wrap items-center gap-2">
-            ${deadlineBadge(n)}
+            ${prioBadge(n)}${categoryBadge(n)}${deadlineBadge(n)}
             <span class="text-xs text-stone-400">จดเมื่อ ${formatDateTime(n.created_at)}</span>
           </div>
         </div>
@@ -267,7 +459,7 @@
         <div class="min-w-0 flex-1">
           <p class="whitespace-pre-wrap break-words text-stone-400 line-through">${escapeHtml(n.content)}</p>
           <div class="mt-1.5 flex flex-wrap items-center gap-2">
-            ${deadlineBadge(n)}
+            ${prioBadge(n)}${categoryBadge(n)}${deadlineBadge(n)}
             <span class="text-xs text-stone-400">เสร็จเมื่อ ${formatDateTime(n.done_at)}</span>
           </div>
         </div>
@@ -276,26 +468,24 @@
     </li>`;
   }
 
-  function renderNotes() {
-    const pending = notes
-      .filter(n => !n.is_done)
-      .sort((a, b) => {
-        // มี deadline มาก่อน (ใกล้สุดขึ้นก่อน) แล้วค่อยงานที่ไม่มี deadline (ใหม่สุดขึ้นก่อน)
-        if (a.deadline && b.deadline && a.deadline !== b.deadline) return a.deadline < b.deadline ? -1 : 1;
-        if (a.deadline && !b.deadline) return -1;
-        if (!a.deadline && b.deadline) return 1;
-        return new Date(b.created_at) - new Date(a.created_at);
-      });
-    const done = notes
-      .filter(n => n.is_done)
-      .sort((a, b) => new Date(b.done_at || b.created_at) - new Date(a.done_at || a.created_at));
+  function renderNotes(focusEdit) {
+    refreshCategoryControls();
+    const filterActive = !!(filters.q.trim() || filters.cat || filters.prio);
+    $('clearFilters').classList.toggle('hidden-view', !filterActive);
+
+    const pendingAll = notes.filter(n => !n.is_done);
+    const doneAll = notes.filter(n => n.is_done);
+    const pending = sortPending(applyFilters(pendingAll));
+    const done = applyFilters(doneAll).sort((a, b) => new Date(b.done_at || b.created_at) - new Date(a.done_at || a.created_at));
 
     $('pendingCount').textContent = pending.length ? '(' + pending.length + ')' : '';
     $('doneCount').textContent = done.length ? '(' + done.length + ')' : '';
 
     if (!pending.length) {
-      listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">' +
-        (done.length ? 'ไม่มีงานค้างแล้ว 🎉' : 'ยังไม่มีงานในตอนนี้ เริ่มจดอันแรกได้เลย') + '</li>';
+      let msg;
+      if (filterActive && pendingAll.length) msg = 'ไม่พบงานที่ตรงกับตัวกรอง';
+      else msg = doneAll.length ? 'ไม่มีงานค้างแล้ว 🎉' : 'ยังไม่มีงานในตอนนี้ เริ่มจดอันแรกได้เลย';
+      listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">' + msg + '</li>';
     } else {
       listEl.innerHTML = pending.map(renderPendingItem).join('');
     }
@@ -304,9 +494,9 @@
     $('doneChevron').textContent = showDone ? 'ซ่อน' : 'แสดง';
     doneListEl.innerHTML = done.length
       ? done.map(renderDoneItem).join('')
-      : '<li class="px-1 text-sm text-stone-300">ยังไม่มีงานที่เสร็จ</li>';
+      : '<li class="px-1 text-sm text-stone-300">' + (filterActive && doneAll.length ? 'ไม่พบรายการที่ตรงกับตัวกรอง' : 'ยังไม่มีงานที่เสร็จ') + '</li>';
 
-    if (editingId) { const ta = $('editArea'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }
+    if (editingId && focusEdit) { const ta = $('editArea'); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }
   }
 
   // ---------- Data ----------
@@ -317,7 +507,7 @@
       .from('quick_notes')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(500);
+      .limit(1000);
     if (error) {
       listEl.innerHTML = '<li class="rounded-2xl border border-dashed border-stone-200 bg-white/60 px-5 py-10 text-center text-stone-400">โหลดข้อมูลไม่สำเร็จ</li>';
       setStatus(statusEl, 'โหลดไม่สำเร็จ: ' + error.message, 'error');
@@ -336,21 +526,30 @@
     const { error } = await db.from('quick_notes').insert({
       content,
       user_id: currentUser.id,
-      deadline: deadlineInput.value || null
+      deadline: deadlineInput.value || null,
+      priority: newPriority,
+      category: categoryInput.value.trim() || null
     });
     saveBtn.disabled = false;
     if (error) { setStatus(statusEl, 'บันทึกไม่สำเร็จ: ' + error.message, 'error'); return; }
     input.value = '';
     deadlineInput.value = '';
+    categoryInput.value = '';
+    newPriority = 'normal';
+    renderPrioPills();
     flash('บันทึกแล้ว ✓', 'ok');
     loadNotes();
   }
 
   async function updateNote(id) {
     const content = $('editArea').value.trim();
-    const deadline = $('editDeadline').value || null;
     if (!content) { setStatus(statusEl, 'ข้อความต้องไม่ว่าง', 'error'); return; }
-    const { error } = await db.from('quick_notes').update({ content, deadline }).eq('id', id);
+    const { error } = await db.from('quick_notes').update({
+      content,
+      deadline: $('editDeadline').value || null,
+      priority: $('editPriority').value,
+      category: $('editCategory').value.trim() || null
+    }).eq('id', id);
     if (error) { setStatus(statusEl, 'แก้ไขไม่สำเร็จ: ' + error.message, 'error'); return; }
     flash('แก้ไขแล้ว ✓', 'ok');
     loadNotes();
@@ -380,13 +579,32 @@
   tabLogin.addEventListener('click', () => setMode('login'));
   tabSignup.addEventListener('click', () => setMode('signup'));
   authBtn.addEventListener('click', submitAuth);
+  forgotBtn.addEventListener('click', forgotPassword);
   passEl.addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(); });
+  $('recoveryBtn').addEventListener('click', submitRecovery);
+  $('newPass2').addEventListener('keydown', e => { if (e.key === 'Enter') submitRecovery(); });
+  $('recoveryCancel').addEventListener('click', cancelRecovery);
   $('logoutBtn').addEventListener('click', logout);
   $('refreshBtn').addEventListener('click', loadNotes);
   saveBtn.addEventListener('click', saveNote);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') saveNote(); });
+  categoryInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveNote(); });
   $('clearDeadline').addEventListener('click', () => { deadlineInput.value = ''; });
   $('toggleDone').addEventListener('click', () => { showDone = !showDone; renderNotes(); });
+
+  document.querySelectorAll('[data-prio-new]').forEach(b =>
+    b.addEventListener('click', () => { newPriority = b.dataset.prioNew; renderPrioPills(); }));
+
+  // filters
+  $('searchInput').addEventListener('input', e => { filters.q = e.target.value; editingId = null; renderNotes(); });
+  $('filterCategory').addEventListener('change', e => { filters.cat = e.target.value; editingId = null; renderNotes(); });
+  $('filterPriority').addEventListener('change', e => { filters.prio = e.target.value; editingId = null; renderNotes(); });
+  $('sortBy').addEventListener('change', e => { filters.sort = e.target.value; editingId = null; renderNotes(); });
+  $('clearFilters').addEventListener('click', () => {
+    filters.q = ''; filters.cat = ''; filters.prio = '';
+    $('searchInput').value = ''; $('filterPriority').value = '';
+    editingId = null; renderNotes();
+  });
 
   function handleListClick(e) {
     const btn = e.target.closest('button[data-act]');
@@ -394,7 +612,7 @@
     const id = Number(btn.dataset.id);
     switch (btn.dataset.act) {
       case 'toggle': toggleDone(id); break;
-      case 'edit':   editingId = id; renderNotes(); break;
+      case 'edit':   editingId = id; renderNotes(true); break;
       case 'cancel': editingId = null; renderNotes(); break;
       case 'update': updateNote(id); break;
       case 'delete': deleteNote(id); break;
@@ -407,7 +625,9 @@
   // ---------- Session handling ----------
   function applySession(session) {
     currentUser = session ? session.user : null;
-    showView(!!currentUser);
+    if (recoveryMode && currentUser) { showView('recovery'); return; }
+    if (recoveryMode && !currentUser) recoveryMode = false;
+    showView(currentUser ? 'app' : 'auth');
     if (currentUser) {
       $('userEmail').textContent = currentUser.email;
       loadNotes();
@@ -418,11 +638,19 @@
   }
 
   db.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') recoveryMode = true;
     // เลื่อนออกไปนอก callback เพื่อเลี่ยง deadlock ของ supabase-js
     setTimeout(() => applySession(session), 0);
   });
   db.auth.getSession().then(({ data }) => applySession(data.session));
+
   setMode('login');
+  renderPrioPills();
+  // ลิงก์รีเซ็ตรหัสผ่านหมดอายุ / ใช้ไปแล้ว
+  if (/error_code=|error_description=/.test(location.hash)) {
+    setStatus(authStatus, 'ลิงก์หมดอายุหรือถูกใช้ไปแล้ว กรุณากด "ลืมรหัสผ่าน?" เพื่อขอลิงก์ใหม่', 'error');
+    history.replaceState(null, '', location.pathname);
+  }
 </script>
 </body>
 </html>
